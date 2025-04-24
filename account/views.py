@@ -1,12 +1,13 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from account.serializers import UserRegistrationSerializer, UserLoginSerializer
+from account.serializers import UserRegistrationSerializer, UserLoginSerializer, UserProfileSerializer
 from rest_framework import status
 from django.contrib.auth import authenticate
 from account.renderers import UserRenderer
 
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.permissions import IsAuthenticated
 
 #Generate Token Manually 
 def get_tokens_for_user(user):
@@ -24,8 +25,15 @@ class UserRegistrationView(APIView):
         if serializer.is_valid(raise_exception=True):
             user = serializer.save()
             token = get_tokens_for_user(user)
-            return Response({"token":token,"message": "User registered successfully!"}, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response({
+                "status": True,
+                "token":token,
+                "message": "User registered successfully!"
+                }, status=status.HTTP_201_CREATED)
+        return Response({
+            "status": False,
+            "error":serializer.errors
+            }, status=status.HTTP_400_BAD_REQUEST)
     
 
 #Login User
@@ -39,5 +47,27 @@ class UserLoginView(APIView):
             user = authenticate(email=email, password=password)
             if user is not None:
                 token = get_tokens_for_user(user)
-                return Response({"token":token,"message": "User logged in successfully!"}, status=status.HTTP_200_OK)
-        return Response({"error": {'non_field_errors':['Email or Password is not Valid']}}, status=status.HTTP_404_NOT_FOUND)
+                return Response({
+                    "status": True,
+                    "token":token,
+                    "message": "User logged in successfully!"
+                    }, status=status.HTTP_200_OK)
+        return Response({
+            "status": False,
+            "error": {'non_field_errors':['Email or Password is not Valid']}
+            }, status=status.HTTP_404_NOT_FOUND)
+    
+#Profile View
+class UserProfileView(APIView):
+    renderer_classes = [UserRenderer]
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        serializer = UserProfileSerializer(request.user)
+        
+        return Response({
+            "status": True,
+            "user": serializer.data,
+            "message": "User Profile Fetched Successfully!"
+        }, status=status.HTTP_200_OK)
+        
+    
