@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from account.serializers import UserRegistrationSerializer, UserLoginSerializer, UserProfileSerializer , UserChangePasswordSerializer
+from account.serializers import UserRegistrationSerializer, UserLoginSerializer, UserProfileSerializer , UserChangePasswordSerializer, UserPasswordResetEmailSerializer , UserPasswordResetSerializer
 from rest_framework import status
 from django.contrib.auth import authenticate
 from account.renderers import UserRenderer
@@ -82,6 +82,37 @@ class UserChangePasswordView(APIView):
             return Response({
                 "status": True,
                 "message": "Password Changed Successfully!"
+            }, status=status.HTTP_200_OK)
+        return Response({
+            "status": False,
+            "error": serializer.errors
+        }, status=status.HTTP_400_BAD_REQUEST)
+
+
+# Reset Email View
+class UserPasswordResetEmailView(APIView):
+    renderer_classes = [UserRenderer]
+    def post(self, request):
+        serializer = UserPasswordResetEmailSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            return Response({
+                "status": True,
+                "message": "Password Reset Email Sent Successfully!"
+            }, status=status.HTTP_200_OK)
+        return Response({   
+            "status": False,
+            "error": serializer.errors
+        }, status=status.HTTP_400_BAD_REQUEST)
+    
+#User password reset view
+class UserPasswordResetView(APIView):
+    renderer_classes = [UserRenderer]
+    def post(self, request,uid, token):
+        serializer = UserPasswordResetSerializer(data=request.data, context={'uid': uid, 'token': token})
+        if serializer.is_valid(raise_exception=True):
+            return Response({
+                "status": True,
+                "message": "Password Reset Successfully!"
             }, status=status.HTTP_200_OK)
         return Response({
             "status": False,
