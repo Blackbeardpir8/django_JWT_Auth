@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from account.serializers import UserRegistrationSerializer, UserLoginSerializer, UserProfileSerializer
+from account.serializers import UserRegistrationSerializer, UserLoginSerializer, UserProfileSerializer , UserChangePasswordSerializer
 from rest_framework import status
 from django.contrib.auth import authenticate
 from account.renderers import UserRenderer
@@ -71,3 +71,19 @@ class UserProfileView(APIView):
         }, status=status.HTTP_200_OK)
         
     
+# Change Password View
+class UserChangePasswordView(APIView):
+    renderer_classes = [UserRenderer]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = UserChangePasswordSerializer(data=request.data, context={'user': request.user})
+        if serializer.is_valid(raise_exception=True):
+            return Response({
+                "status": True,
+                "message": "Password Changed Successfully!"
+            }, status=status.HTTP_200_OK)
+        return Response({
+            "status": False,
+            "error": serializer.errors
+        }, status=status.HTTP_400_BAD_REQUEST)
