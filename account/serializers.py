@@ -4,6 +4,7 @@ from account.models import User
 from django.utils.encoding import force_str,smart_str, DjangoUnicodeDecodeError,force_bytes
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from account.utils import Util
 
 
 #User Registration Serializer
@@ -83,7 +84,13 @@ class UserPasswordResetEmailSerializer(serializers.Serializer):
             link = 'http://localhost:8000/api/user/reset-password/' + uid + '/' + token
             print("Password Reset Link: ", link)
 
-            # send_email(email, link)  # Uncomment this line to send the email
+            # send_email(email, link)  
+            data = {
+                'subject': 'Reset Your Password',
+                'body': 'Click the link below to reset your password\n' + link,
+                'to_email': user.email,
+            }
+            Util.send_email(data)
 
         else:
             raise serializers.ValidationError("Email does not exist.")
