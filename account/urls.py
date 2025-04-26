@@ -4,7 +4,7 @@ from django.urls import path , include
 from account.views import UserRegistrationView, UserLoginView, UserProfileView, UserChangePasswordView, UserPasswordResetEmailView, UserPasswordResetView
 
 #For Frontend
-from account.views import register_page,login_page
+from account.views import register_page,login_page,profile_page
 
 urlpatterns = [
     # API URLs
@@ -17,5 +17,6 @@ urlpatterns = [
 
     # Frontend URLs
     path('register/', register_page, name='register_page'),
-    path('login/', login_page, name='login_page')
+    path('login/', login_page, name='login_page'),
+    path('profile/', profile_page, name='profile_page'),
 ]

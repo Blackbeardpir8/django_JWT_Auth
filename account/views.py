@@ -134,3 +134,6 @@ def register_page(request):
 
 def login_page(request):
     return render(request, 'account/login.html')
+
+def profile_page(request):
+    return render(request, 'account/profile.html')

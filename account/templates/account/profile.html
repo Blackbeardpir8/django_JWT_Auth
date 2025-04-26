@@ -1,0 +1,17 @@
+<!-- templates/account/profile.html -->
+{% extends 'account/base.html' %}
+{% load static %}
+{% block title %}User Profile{% endblock %}
+{% block content %}
+<h2>Welcome to Your Profile</h2>
+
+<div id="profile-container">
+    <p><strong>Name:</strong> <span id="name">Loading...</span></p>
+    <p><strong>Email:</strong> <span id="email">Loading...</span></p>
+    <p><strong>Is Staff:</strong> <span id="is_staff">Loading...</span></p>
+</div>
+
+<button onclick="logout()">Logout</button>
+
+<script src="{% static 'js/profile.js' %}"></script>
+{% endblock %}
