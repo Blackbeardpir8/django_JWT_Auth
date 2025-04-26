@@ -6,6 +6,7 @@ from rest_framework import status
 from django.contrib.auth import authenticate
 from account.renderers import UserRenderer
 
+
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
 
@@ -118,3 +119,15 @@ class UserPasswordResetView(APIView):
             "status": False,
             "error": serializer.errors
         }, status=status.HTTP_400_BAD_REQUEST)
+    
+
+
+
+# Normal Views
+
+
+def home(request):
+    return render(request, 'account/base.html')
+
+def register_page(request):
+    return render(request, 'account/register.html')
