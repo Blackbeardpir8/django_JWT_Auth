@@ -135,6 +135,14 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+#REST FRAMEWORK SETTINGS
+AUTHENTICATION_BACKENDS = [
+    'account.backends.EmailAuthBackend',  # 👈 your custom backend
+    'django.contrib.auth.backends.ModelBackend',  # 👈 fallback for admin panel
+]
+
+
+
 #Auth User Model
 AUTH_USER_MODEL = 'account.User'
 

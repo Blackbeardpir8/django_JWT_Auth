@@ -131,3 +131,6 @@ def home(request):
 
 def register_page(request):
     return render(request, 'account/register.html')
+
+def login_page(request):
+    return render(request, 'account/login.html')
