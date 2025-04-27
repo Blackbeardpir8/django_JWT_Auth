@@ -1,9 +1,9 @@
 // static/js/profile.js
 
-// Get the access token from local storage
+// Get token
 const accessToken = localStorage.getItem('accessToken');
 
-// Redirect to login if not authenticated
+// If no token, redirect
 if (!accessToken) {
     alert("You must be logged in to view your profile.");
     window.location.href = '/login/';
@@ -27,22 +27,29 @@ async function fetchProfile() {
             document.getElementById('email').textContent = data.user.email;
             document.getElementById('is_staff').textContent = data.user.is_staff ? 'Yes' : 'No';
         } else {
-            alert("Session expired or unauthorized. Please log in again.");
-            localStorage.removeItem('accessToken');
-            window.location.href = '/login/';
+            autoLogout();  // Auto logout if token expired or invalid
         }
     } catch (error) {
         console.error("Error fetching profile:", error);
-        alert("Something went wrong. Try again later.");
+        autoLogout();  // Auto logout on error
     }
 }
 
-// Logout function
+// Manual Logout Button
+document.getElementById('logoutButton').addEventListener('click', logout);
+
+// Logout Function
 function logout() {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
     window.location.href = '/login/';
 }
 
-// Load profile on page load
+// Auto Logout Function (when token expires or is invalid)
+function autoLogout() {
+    alert("Session expired. Please login again.");
+    logout();
+}
+
+// Call on page load
 fetchProfile();

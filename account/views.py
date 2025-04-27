@@ -140,3 +140,10 @@ def profile_page(request):
 
 def change_password_page(request):
     return render(request, 'account/change_password.html')
+
+def reset_password_email_page(request):
+    return render(request, 'account/reset_password_email.html')
+
+
+def reset_password_page(request):
+    return render(request, 'account/reset_password.html')
