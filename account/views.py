@@ -137,3 +137,6 @@ def login_page(request):
 
 def profile_page(request):
     return render(request, 'account/profile.html')
+
+def change_password_page(request):
+    return render(request, 'account/change_password.html')
