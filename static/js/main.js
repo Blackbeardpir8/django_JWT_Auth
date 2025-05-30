@@ -104,7 +104,9 @@ function initPasswordStrengthMeters() {
 
   passwordInputs.forEach((input) => {
     const group = input.closest(".form-group");
-    if (!group) return;
+    if (!group) {
+      return;
+    }
 
     const strengthMeter = group.querySelector(".strength-meter");
     const strengthText = group.querySelector(".strength-text");
